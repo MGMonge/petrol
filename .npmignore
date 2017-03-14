@@ -1,0 +1,10 @@
+/.idea
+/node_modules
+/core-tests
+/src
+/tests/*
+
+.npm-debug.log
+.yarn-error.log
+
+.DS_Store

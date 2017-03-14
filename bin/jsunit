@@ -1,0 +1,54 @@
+#!/usr/bin/env node
+
+'use strict';
+
+require('babel-core/register');
+
+let program = require('commander');
+let glob = require('glob');
+let Mocha = require('mocha');
+let testsLocation = 'tests/**/*Test.js';
+let path = require('path');
+let jsunit = {};
+
+program
+    .version('1.0.0')
+    .arguments('<path>')
+    .option('-f, --stop-on-failure', 'Stop execution upon first error or failure.')
+    .action((path) => {
+        testsLocation = path.endsWith('/') ? `${path}**/*Test.js` : path;
+    })
+    .parse(process.argv);
+
+new Promise((resolve, reject) => {
+    jsunit.filter = testsLocation.split(':')[1];
+
+    glob(testsLocation.split(':')[0], {absolute: true}, (errors, files) => {
+        if (errors) {
+            return reject(errors);
+        }
+
+        return resolve(files);
+    });
+}).then((files) => {
+    jsunit.files = files;
+    global.jsunit = jsunit;
+
+    let mocha = new Mocha();
+
+    if (program.stopOnFailure) {
+        mocha.bail(true);
+    }
+
+    mocha.addFile(path.resolve(__dirname, '../start.js'));
+
+    // Run the tests.
+    mocha.run(function (failures) {
+        process.on('exit', function () {
+            process.exit(failures);  // exit with non-zero status if there were failures
+        });
+    });
+
+}).catch((failures) => {
+    console.log(failures);
+})
