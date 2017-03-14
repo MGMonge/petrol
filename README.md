@@ -5,7 +5,7 @@ If you don't feel confortable with the sintax of the javascript testing framewor
 ## Installation
 
 ```bash
-npm install --save-dev jsunit
+npm install --save-dev js-unit
 ```
 
 ## Usage
@@ -15,7 +15,7 @@ Create a file named ExampleTest.js in the project `tests/` directory:
 
 
 ```javascript
-import TestCase from 'jsunit/core/TestCase';
+import TestCase from 'js-unit/core/TestCase';
 
 export default class ExampleTest extends TestCase {
 
@@ -31,7 +31,7 @@ export default class ExampleTest extends TestCase {
 ### Run it
 
 ```bash
-./node_modules/jsunit/bin/jsunit
+./node_modules/js-unit/bin/jsunit
 ```
 
 JSUnit will run all files ending with `Test.js` in the specified directory, by default `tests/` directory.
@@ -44,14 +44,14 @@ All Tests files need to be an exportable ES2015 class and must extends the JSuni
 
 ```javascript
 // SomeTest.js
-import TestCase from 'jsunit/core/TestCase';
+import TestCase from 'js-unit/core/TestCase';
 
 export default class SomeTest extends TestCase {}
 ```
 
 JSUnit will run all the methods starting with the word `test` or with the block comment `/** @test */` above as an individual test.
 ```javascript
-import TestCase from 'jsunit/core/TestCase';
+import TestCase from 'js-unit/core/TestCase';
 
 export default class SomeTest extends TestCase {
 
@@ -74,19 +74,19 @@ export default class SomeTest extends TestCase {
 ### Run test files individually
 
 ```bash
-./node_modules/jsunit/bin/jsunit tests/SomeTest.js
+./node_modules/js-unit/bin/jsunit tests/SomeTest.js
 ```
 
 ### Filter tests
 Run only `anotherTest()` from `SomeTest.js` file
 ```bash
-./node_modules/jsunit/bin/jsunit tests/SomeTest.js:anotherTest
+./node_modules/js-unit/bin/jsunit tests/SomeTest.js:anotherTest
 ```
 
 ### Stop on failure
 Stop running the tests after the first failure using the flag `--stop-on-failure` or `-f`
 ```bash
-./node_modules/jsunit/bin/jsunit tests/ -f
+./node_modules/js-unit/bin/jsunit tests/ -f
 ```
 
 ### Assertions
@@ -123,7 +123,7 @@ Used on objects, it asserts that two variables do not reference the same object.
 ### Example of assertions
 
 ```javascript
-import TestCase from 'jsunit/core/TestCase';
+import TestCase from 'js-unit/core/TestCase';
 
 export default class ExampleTest extends TestCase {
 
@@ -161,7 +161,7 @@ export default class ExampleTest extends TestCase {
 JSUnit lets you register hooks that are run before and after your tests. This allows you to run setup and/or teardown code.
 
 ```javascript
-import TestCase from 'jsunit/core/TestCase';
+import TestCase from 'js-unit/core/TestCase';
 
 export default class SomeTest extends TestCase {
 
@@ -206,7 +206,7 @@ To create custom assertions you will need:
 1. Extend the TestCase
 ```javascript
 // VueTestCase.js
-import TestCase from 'jsunit/core/TestCase';
+import TestCase from 'js-unit/core/TestCase';
 // Import some dependencies
 import browserEnv from 'browser-env';
 import Vue from 'vue/dist/vue.js';

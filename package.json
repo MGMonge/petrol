@@ -1,5 +1,5 @@
 {
-  "name": "jsunit",
+  "name": "js-unit",
   "version": "1.0.0",
   "description": "A javascript unit testing tool inspired by the famous PHPUnit framework. This tool uses mocha js internally to run the tests",
   "license": "MIT",
