@@ -2,7 +2,9 @@
 
 'use strict';
 
-require('babel-core/register');
+require('babel-core/register')({
+    ignore: /node_modules\/(?!js-unit)/
+});
 
 let program = require('commander');
 let glob = require('glob');
@@ -12,7 +14,7 @@ let path = require('path');
 let jsunit = {};
 
 program
-    .version('1.0.0')
+    .version('1.0.4')
     .arguments('<path>')
     .option('-f, --stop-on-failure', 'Stop execution upon first error or failure.')
     .action((path) => {
