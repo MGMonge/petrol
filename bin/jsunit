@@ -3,7 +3,8 @@
 'use strict';
 
 require('babel-core/register')({
-    ignore: /node_modules\/(?!js-unit)/
+    ignore: /node_modules\/(?!js-unit)/,
+    presets: ["es2015"]
 });
 
 let program = require('commander');

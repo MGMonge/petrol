@@ -1,6 +1,6 @@
 {
   "name": "js-unit",
-  "version": "1.0.4",
+  "version": "1.0.6",
   "description": "A javascript unit testing tool inspired by the famous PHPUnit framework. This tool uses mocha js internally to run the tests",
   "license": "MIT",
   "repository": "https://github.com/mgmonge/jsunit",
@@ -17,7 +17,7 @@
       "es2015"
     ]
   },
-  "devDependencies": {
+  "dependencies": {
     "assert": "^1.4.1",
     "babel-preset-es2015": "^6.22.0",
     "babel-register": "^6.23.0",
@@ -27,9 +27,5 @@
     "esprima-walk": "^0.1.0",
     "glob": "^7.1.1",
     "mocha": "^3.2.0"
-  },
-  "dependencies": {
-    "browser-env": "^2.0.25",
-    "vue": "^2.2.4"
   }
 }
