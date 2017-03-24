@@ -4,8 +4,10 @@
 
 require('babel-core/register')({
     ignore: /node_modules\/(?!js-unit)/,
-    presets: ["es2015"]
+    presets: [ "es2015", "stage-0" ]
 });
+
+require("babel-polyfill");
 
 let program = require('commander');
 let glob = require('glob');
