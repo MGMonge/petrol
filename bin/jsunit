@@ -1,19 +1,13 @@
 #!/usr/bin/env node
-
 'use strict';
 
-require('babel-core/register')({
-    ignore: /node_modules\/(?!js-unit)/,
-    presets: [ "es2015", "stage-0" ]
-});
-
-require("babel-polyfill");
+global.__started_at = new Date;
 
 let program = require('commander');
 let glob = require('glob');
-let Mocha = require('mocha');
 let testsLocation = 'tests/**/*Test.js';
 let path = require('path');
+let jsdom = require('jsdom-light').jsdom;
 let jsunit = {};
 
 program
@@ -37,22 +31,25 @@ new Promise((resolve, reject) => {
     });
 }).then((files) => {
     jsunit.files = files;
+    jsunit.stopOnFailure = program.stopOnFailure;
     global.jsunit = jsunit;
+    global.document = jsdom('<html><head></head><body></body></html>');
+    global.window = global.document.defaultView;
 
-    let mocha = new Mocha();
+    const moduleAlias = require('module-alias');
 
-    if (program.stopOnFailure) {
-        mocha.bail(true);
-    }
+    moduleAlias.addAlias('vue', 'vue/dist/vue.min');
 
-    mocha.addFile(path.resolve(__dirname, '../start.js'));
+    const hooks = require('require-extension-hooks');
+    hooks('vue').plugin('vue').push();
+    hooks(['vue', 'js']).plugin('babel').push();
 
-    // Run the tests.
-    mocha.run(function (failures) {
-        process.on('exit', function () {
-            process.exit(failures);  // exit with non-zero status if there were failures
-        });
-    });
+    var Jasmine = require('jasmine');
+    var jasmine = new Jasmine();
+
+    jasmine.env.clearReporters();
+    jasmine.addReporter(require('../console-reporter.js'));
+    jasmine.execute([path.resolve(__dirname, '../start.js')]);
 
 }).catch((failures) => {
     console.log(failures);

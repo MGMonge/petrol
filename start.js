@@ -1,7 +1,9 @@
 import TestFinder from './core/TestFinder';
-import colors from 'colors';
+import 'colors';
 
 let finder = new TestFinder;
+
+jasmine.stopSpecOnExpectationFailure = true;
 
 jsunit.files.forEach((file) => {
     try {
@@ -14,10 +16,10 @@ jsunit.files.forEach((file) => {
         }
 
         describe(file.replace(process.cwd(), ''), () => {
-            before(() => instance.before());
+            beforeAll(() => instance.before());
             beforeEach(() => instance.beforeEach());
             afterEach(() => instance.afterEach());
-            after(() => instance.after());
+            afterAll(() => instance.after());
 
             testMethods.forEach((method) => {
                 it(method, () => {
@@ -28,6 +30,7 @@ jsunit.files.forEach((file) => {
 
     } catch (e) {
         console.log(`Couldn't read file [${file}]`.red);
+        console.log(e);
         process.exit();
     }
 });
