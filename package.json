@@ -1,7 +1,7 @@
 {
   "name": "js-unit",
-  "version": "1.0.9",
-  "description": "A javascript unit testing tool inspired by the famous PHPUnit framework. This tool uses mocha js internally to run the tests",
+  "version": "1.1.0",
+  "description": "A javascript unit testing tool inspired by the famous PHPUnit framework. This tool uses jasmine internally to run the tests",
   "license": "MIT",
   "repository": "https://github.com/mgmonge/jsunit",
   "author": {
@@ -26,6 +26,7 @@
   },
   "dependencies": {
     "assert": "^1.4.1",
+    "ava": "^0.22.0",
     "colors": "^1.1.2",
     "commander": "^2.9.0",
     "esprima": "^3.1.3",

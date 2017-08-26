@@ -1,4 +1,18 @@
+import {wrapAssertions} from 'ava/lib/assert';
+import assert from 'assert';
+
 class BaseTestCase {
+
+    get magicAssert() {
+        let assertion = {
+            pass() {},
+            fail(ava, ex) {
+                assert.fail(ex.raw.actual, ex.raw.expected, `\n${ex.values[0].formatted}`)
+            }
+        };
+
+        return wrapAssertions(assertion);
+    }
 
     before() {
         // override

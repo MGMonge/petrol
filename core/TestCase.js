@@ -28,10 +28,10 @@ class TestCase extends BaseTestCase {
      */
     assertEquals(expected, actual, message = '') {
         if (typeof actual == 'object') {
-            return assert.deepEqual(actual, expected, message);
+            return this.magicAssert.deepEqual(actual, expected, message);
         }
 
-        assert.equal(actual, expected, message);
+        this.magicAssert.is(actual, expected, message);
     }
 
     /**
@@ -39,10 +39,10 @@ class TestCase extends BaseTestCase {
      */
     assertNotEquals(expected, actual, message = '') {
         if (typeof actual == 'object') {
-            return assert.notDeepEqual(actual, expected, message);
+            return this.magicAssert.notDeepEqual(actual, expected, message);
         }
 
-        assert.notEqual(actual, expected, message);
+        this.magicAssert.not(actual, expected, message);
     }
 
     /**
@@ -51,6 +51,8 @@ class TestCase extends BaseTestCase {
      * the same object.
      */
     assertSame(expected, actual, message = '') {
+        this.assertEquals(expected, actual);
+
         if (actual instanceof Array) {
             return assert.deepStrictEqual(actual, expected, message);
         }

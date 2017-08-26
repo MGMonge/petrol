@@ -7,6 +7,8 @@ module.exports = {
     executed: 0,
     failures: [],
     lastSpecStartedAt: null,
+    currentSuite: null,
+    ranTests: [],
 
     jasmineStarted(suiteInfo) {
         this.total = suiteInfo.totalSpecsDefined;
@@ -16,10 +18,16 @@ module.exports = {
     },
 
     suiteStarted(result) {
+        this.currentSuite = result.id;
+        this.ranTests[this.currentSuite] = [];
         console.log(` ${result.fullName.bold}`);
     },
 
     suiteDone() {
+        if (this.ranTests[this.currentSuite].length === 0) {
+            console.log(`  No tests executed!`.yellow);
+        }
+
         console.log(``);
     },
 
@@ -47,6 +55,7 @@ module.exports = {
 
     specDone(result) {
         this.executed++;
+        this.ranTests[this.currentSuite].push(result.id)
 
         if (result.status === 'passed') {
 
@@ -77,22 +86,6 @@ module.exports = {
         return (new Date - start) / 1000;
     },
 
-    displayFailedState() {
-        console.log(`\n${this.failures.length} Failing test${this.failures.length > 1 ? 's' : ''}\n`.bold.red);
-
-        for (let i = 0; i < this.failures.length; i++) {
-            console.log(`${i + 1}) ${this.failures[i].test.yellow}`);
-
-            for (let error of this.failures[i].errors) {
-                console.log(this.displayStack(error.stack));
-            }
-        }
-
-        console.log(`\nTime: ${seconds} seconds\n`);
-
-        console.log(`OK (${this.total} tests, ${this.passed} passing, ${this.failures.length} failing)`.bgRed);
-    },
-
     jasmineDone() {
 
         console.log('-'.bold.repeat(process.stdout.columns - 1));
@@ -112,6 +105,11 @@ module.exports = {
         let seconds = this.secondsFrom(global.__started_at);
 
         console.log(`\nTime: ${seconds} seconds\n`);
+
+        if (this.total == 0) {
+            console.log(`No tests executed!`.black.bgYellow);
+            process.exit();
+        }
 
         if (this.failures.length > 0) {
             console.log(`OK (${this.executed} tests, ${this.passed} passing, ${this.failures.length} failing)`.bgRed);

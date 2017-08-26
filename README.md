@@ -1,5 +1,5 @@
 # JSUnit
-A javascript unit testing tool inspired by the famous PHPUnit framework. This tool uses mocha js internally to run the tests.
+A javascript unit testing tool inspired by the famous PHPUnit framework. This tool uses eclipse internally to run the tests.
 If you don't feel confortable with the sintax of the javascript testing frameworks out there this package is for you
 
 ## Installation
