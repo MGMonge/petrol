@@ -3,7 +3,7 @@ import 'colors';
 
 let finder = new TestFinder;
 
-jasmine.stopSpecOnExpectationFailure = true;
+console.log(`Running tests...\n`);
 
 jsunit.files.forEach((file) => {
     try {

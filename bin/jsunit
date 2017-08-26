@@ -36,6 +36,9 @@ new Promise((resolve, reject) => {
     global.document = jsdom('<html><head></head><body></body></html>');
     global.window = global.document.defaultView;
 
+    console.log(`JSUnit Javascript Testing Framework\n`);
+    console.log(`Preparing files...`);
+
     const moduleAlias = require('module-alias');
 
     moduleAlias.addAlias('vue', 'vue/dist/vue.min');

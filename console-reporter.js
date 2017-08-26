@@ -12,7 +12,6 @@ module.exports = {
 
     jasmineStarted(suiteInfo) {
         this.total = suiteInfo.totalSpecsDefined;
-        console.log(`JSUnit Javascript Testing Framework\n`);
         console.log(this.displaySuiteTitle(`Tests (${suiteInfo.totalSpecsDefined})`));
         console.log(``);
     },
