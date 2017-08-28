@@ -1,5 +1,0 @@
-import TestCase from 'jsunit/core/TestCase';
-
-export default class {{ name }} extends TestCase {
-
-}

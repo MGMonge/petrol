@@ -1,8 +1,0 @@
-/.idea
-/node_modules
-/core-tests
-
-.npm-debug.log
-.yarn-error.log
-
-.DS_Store
