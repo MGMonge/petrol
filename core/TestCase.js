@@ -1,5 +1,4 @@
-import BaseTestCase from '../core/BaseTestCase';
-import assert from 'assert';
+import BaseTestCase from "../core/BaseTestCase";
 
 class TestCase extends BaseTestCase {
 
@@ -10,7 +9,9 @@ class TestCase extends BaseTestCase {
         this.assertConstructor(expected);
         this.assertObject(actual);
 
-        assert(actual instanceof expected, `Expected object to be instance of [${expected.name}], ${actual.constructor.name} given ${message}`);
+        let defaultMessage = `Expected object to be instance of [${expected.name}], ${actual.constructor.name} given ${message}`;
+
+        this.assertTrue(actual instanceof expected, message || defaultMessage);
     }
 
     /**
@@ -18,31 +19,28 @@ class TestCase extends BaseTestCase {
      */
     assertCount(expectedCount, haystack, message = '') {
         this.assertInteger(expectedCount);
-        this.assertArray(haystack);
 
-        assert(haystack.length == expectedCount, `Expected ${expectedCount} elements, but found ${haystack.length}. ${message}`);
+        if (typeof haystack.length == 'undefined') {
+            fail('The second argument of assertCount() must have length property');
+        }
+
+        let defaultMessage = `Expected ${expectedCount} elements, but found ${haystack.length}`;
+
+        this.assertEquals(haystack.length, expectedCount, message || defaultMessage);
     }
 
     /**
      * Asserts that two variables are equal.
      */
     assertEquals(expected, actual, message = '') {
-        if (typeof actual == 'object') {
-            return this.magicAssert.deepEqual(actual, expected, message);
-        }
-
-        this.magicAssert.is(actual, expected, message);
+        this.magicAssert.deepEqual(actual, expected, message);
     }
 
     /**
      * Asserts that two variables are not equal.
      */
     assertNotEquals(expected, actual, message = '') {
-        if (typeof actual == 'object') {
-            return this.magicAssert.notDeepEqual(actual, expected, message);
-        }
-
-        this.magicAssert.not(actual, expected, message);
+        return this.magicAssert.notDeepEqual(actual, expected, message);
     }
 
     /**
@@ -51,13 +49,7 @@ class TestCase extends BaseTestCase {
      * the same object.
      */
     assertSame(expected, actual, message = '') {
-        this.assertEquals(expected, actual);
-
-        if (actual instanceof Array) {
-            return assert.deepStrictEqual(actual, expected, message);
-        }
-
-        assert.strictEqual(actual, expected, message);
+        this.magicAssert.is(actual, expected, message);
     }
 
     /**
@@ -66,25 +58,25 @@ class TestCase extends BaseTestCase {
      * the same object.
      */
     assertNotSame(expected, actual, message = '') {
-        if (actual instanceof Array) {
-            return assert.notDeepStrictEqual(actual, expected, message);
-        }
-
-        assert.notStrictEqual(actual, expected, message);
+        this.magicAssert.not(actual, expected, message);
     }
 
     /**
      * Asserts that a condition is true.
      */
     assertTrue(condition, message = '') {
-        assert.equal(!!condition, true, message);
+        let defaultMessage = `Expected true, but got false`;
+
+        this.assertEquals(condition, true, message || defaultMessage);
     }
 
     /**
      * Asserts that a condition is false.
      */
     assertFalse(condition, message = '') {
-        assert.equal(!!condition, false, message);
+        let defaultMessage = `Expected false, but got true`;
+
+        this.assertEquals(false, condition, message || defaultMessage);
     }
 
     /**
@@ -94,7 +86,9 @@ class TestCase extends BaseTestCase {
         this.assertString(property);
         this.assertObject(object);
 
-        assert(typeof object[property] != 'undefined', `Property [${property}] was not found on object ${JSON.stringify(object)} ${message}`);
+        let defaultMessage = `Property [${property}] was not found on object ${JSON.stringify(object)} ${message}`;
+
+        this.assertTrue(typeof object[property] != 'undefined', message || defaultMessage);
     }
 
     /**
@@ -104,7 +98,9 @@ class TestCase extends BaseTestCase {
         this.assertString(property);
         this.assertObject(object);
 
-        assert(typeof object[property] == 'undefined', `Property [${property}] was found on object ${JSON.stringify(object)} ${message}`);
+        let defaultMessage = `Property [${property}] was found on object ${JSON.stringify(object)} ${message}`;
+
+        this.assertTrue(typeof object[property] == 'undefined', message || defaultMessage);
     }
 
     /**
@@ -114,7 +110,9 @@ class TestCase extends BaseTestCase {
         this.assertString(needle);
         this.assertString(string);
 
-        assert(string.includes(needle), `'${needle}' was not found in '${string}' ${message}`);
+        let defaultMessage = `Expected '${string}' to contain '${needle}'`;
+
+        this.assertTrue(string.includes(needle), message || defaultMessage);
     }
 
     /**
@@ -124,7 +122,9 @@ class TestCase extends BaseTestCase {
         this.assertString(needle);
         this.assertString(string);
 
-        assert(!string.includes(needle), `'${needle}' was found in '${string}' ${message}`);
+        let defaultMessage = `Expected '${string}' to not contain '${needle}'`;
+
+        this.assertFalse(string.includes(needle), message || defaultMessage);
     }
 
     /**
@@ -133,7 +133,15 @@ class TestCase extends BaseTestCase {
     expectsError(callback, message = '') {
         this.assertFunction(callback);
 
-        assert.throws(() => callback(), Error, message);
+        let defaultMessage = 'Expected error has not been thrown';
+
+        try {
+            callback();
+
+            fail(message || defaultMessage);
+        } catch (e) {
+
+        }
     }
 }
 

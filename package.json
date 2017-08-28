@@ -19,6 +19,9 @@
     "testing",
     "coverage",
     "unit-test",
+    "vue-unit-test",
+    "vue-test",
+    "vue",
     "js-unit"
   ],
   "engines": {
@@ -34,10 +37,13 @@
     "glob": "^7.1.1",
     "jasmine": "^2.7.0",
     "jsdom-light": "^1.0.2",
+    "mkdirp": "^0.5.1",
     "module-alias": "^2.0.1",
+    "pretty-error": "^2.1.1",
     "require-extension-hooks": "^0.3.0",
     "require-extension-hooks-babel": "^0.1.1",
     "require-extension-hooks-vue": "^0.4.0",
+    "source-map-support": "^0.4.16",
     "vue": "^2.4.2"
   }
 }

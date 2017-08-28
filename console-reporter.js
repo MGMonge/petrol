@@ -1,7 +1,16 @@
 import "colors";
+import PrettyError from 'pretty-error';
+
+Error.stackTraceLimit = Infinity;
+
+let pe = new PrettyError;
+pe.skipPackage('jasmine-core', 'vue');
+pe.skipPath('./core/BaseTestCase.js');
+pe.appendStyle({
+    'pretty-error > trace > item' : {marginBottom: 0}
+});
 
 module.exports = {
-
     total: 0,
     passed: 0,
     executed: 0,
@@ -39,13 +48,6 @@ module.exports = {
         string = string.charAt(0).toUpperCase() + string.slice(1);
 
         return string.replace(/__/g, '_').replace(/_/g, ' ');
-    },
-
-    displayStack(stack) {
-        var firstLine = stack.split('\n')[0];
-
-
-        return stack.replace(firstLine, firstLine.red);
     },
 
     specStarted() {
@@ -97,7 +99,11 @@ module.exports = {
             console.log(`${i + 1}) ${this.failures[i].test.yellow}`);
 
             for (let error of this.failures[i].errors) {
-                console.log(this.displayStack(error.stack));
+                console.log(pe.render(error));
+
+                if (jsunit.stopOnFailure) {
+                    break;
+                }
             }
         }
 

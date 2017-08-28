@@ -1,0 +1,9 @@
+import VueTestCase from 'jsunit/core/VueTestCase';
+
+export default class {{ name }} extends VueTestCase {
+
+    beforeEach() {
+        // Mount component before each test to make template assertions
+        this.SUT = this.mount(VueComponent);
+    }
+}

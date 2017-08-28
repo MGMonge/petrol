@@ -1,18 +1,6 @@
-import {wrapAssertions} from 'ava/lib/assert';
-import assert from 'assert';
+import {wrapAssertions} from "ava/lib/assert";
 
 class BaseTestCase {
-
-    get magicAssert() {
-        let assertion = {
-            pass() {},
-            fail(ava, ex) {
-                assert.fail(ex.raw.actual, ex.raw.expected, `\n${ex.values[0].formatted}`)
-            }
-        };
-
-        return wrapAssertions(assertion);
-    }
 
     before() {
         // override
@@ -33,8 +21,8 @@ class BaseTestCase {
     assertConstructor(value) {
         try {
             new value;
-        } catch(e) {
-            throw new Error(`Expected constructor, ${typeof value} given`);
+        } catch (e) {
+            fail(`Expected constructor, ${typeof value} given`);
         }
     }
 
@@ -42,35 +30,47 @@ class BaseTestCase {
         if (typeof value === 'object') {
             return true;
         }
-        throw new Error(`Expected object, ${typeof value} given`);
+        fail(`Expected object, ${typeof value} given`);
     }
 
     assertInteger(value) {
         if (typeof value === 'number' && value == parseInt(value, 10)) {
             return true;
         }
-        throw new Error(`Expected integer, ${typeof value} given`);
+        fail(`Expected integer, ${typeof value} given`);
     }
 
     assertArray(value) {
         if (value instanceof Array) {
             return true;
         }
-        throw new Error(`Expected array, ${typeof value} given`);
+        fail(`Expected array, ${typeof value} given`);
     }
 
     assertFunction(value) {
         if (typeof value === 'function') {
             return true;
         }
-        throw new Error(`Expected function, ${typeof value} given`);
+        fail(`Expected function, ${typeof value} given`);
     }
 
     assertString(value) {
         if (typeof value === 'string') {
             return true;
         }
-        throw new Error(`Expected string, ${typeof value} given`);
+        fail(`Expected string, ${typeof value} given`);
+    }
+
+    get magicAssert() {
+        let assertion = {
+            pass() {
+            },
+            fail(ava, ex) {
+                fail(`\n${ex.message}\n${ex.values[0].formatted}`);
+            }
+        };
+
+        return wrapAssertions(assertion);
     }
 }
 
