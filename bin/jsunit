@@ -39,14 +39,14 @@ new Promise((resolve, reject) => {
         return resolve(files);
     });
 }).then((files) => {
+    console.log(`JSUnit Javascript Testing Framework\n`);
+    console.log(`Preparing files...`);
+
     jsunit.files = files;
     jsunit.stopOnFailure = program.stopOnFailure;
     global.jsunit = jsunit;
     global.document = jsdom('<html><head></head><body></body></html>');
     global.window = global.document.defaultView;
-
-    console.log(`JSUnit Javascript Testing Framework\n`);
-    console.log(`Preparing files...`);
 
     require('source-map-support').install({
         environment: 'node',

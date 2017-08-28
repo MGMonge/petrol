@@ -1,6 +1,6 @@
 import fs from 'fs';
-import esprima from 'esprima';
 import walk from 'esprima-walk';
+let esprima = require('esprima');
 
 class TestFinder {
 

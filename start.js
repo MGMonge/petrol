@@ -23,7 +23,13 @@ jsunit.files.forEach((file) => {
 
             testMethods.forEach((method) => {
                 it(method, () => {
-                    instance[method]();
+                    let test = instance[method]();
+
+                    if (test instanceof Promise) {
+                        test.catch((error) => {
+                            fail(error);
+                        })
+                    }
                 });
             });
         });

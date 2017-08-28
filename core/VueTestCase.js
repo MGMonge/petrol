@@ -35,6 +35,16 @@ class VueTestCase extends TestCase {
         this.assertNumberOfElements(selector, 0);
     }
 
+    click(selector) {
+        var event = document.createEvent("HTMLEvents");
+
+        event.initEvent('click', true, true);
+
+        let element = this.find(selector);
+
+        element.dispatchEvent(event);
+    }
+
     findAll(selector) {
         return this.mounted.$el.querySelectorAll(selector);
     }
@@ -47,6 +57,10 @@ class VueTestCase extends TestCase {
         }
 
         return element;
+    }
+
+    nextTick() {
+        this.SUT.$nextTick();
     }
 }
 
