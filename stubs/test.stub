@@ -1,4 +1,4 @@
-import TestCase from 'jsunit/core/TestCase';
+import TestCase from 'js-unit/core/TestCase';
 
 export default class {{ name }} extends TestCase {
 

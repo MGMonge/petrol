@@ -14,7 +14,7 @@ let registeredCommands = [
 ];
 
 program
-    .version('1.1.0')
+    .version('1.1.2')
     .command('make:test [name]', 'Generates a test file')
     .command('make:vue [name]', 'Generates a vue test file')
     .arguments('<path>')
@@ -55,12 +55,11 @@ new Promise((resolve, reject) => {
     });
 
     const moduleAlias = require('module-alias');
+    const hooks = require('require-extension-hooks');
 
     moduleAlias.addAlias('vue', 'vue/dist/vue.min');
-
-    const hooks = require('require-extension-hooks');
     hooks('vue').plugin('vue').push();
-    hooks(['vue', 'js']).plugin('babel').push();
+    hooks(['vue', 'js']).plugin(path.resolve(__dirname, '../libs/require-extension-hooks-babel.js')).push();
 
     var Jasmine = require('jasmine');
     var jasmine = new Jasmine();
