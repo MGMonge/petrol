@@ -3,8 +3,11 @@ import Vue from "vue";
 global.Vue = Vue;
 
 class VueTestCase extends TestCase {
-    mount(VueComponent) {
-        this.mounted = new Vue(VueComponent).$mount();
+
+    mount(VueComponent, props = {}) {
+        let Constructor = Vue.extend(VueComponent);
+
+        this.mounted = new Constructor({ propsData: props }).$mount();
 
         return this.mounted;
     }
