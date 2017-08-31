@@ -5,14 +5,14 @@ let finder = new TestFinder;
 
 console.log(`Running tests...\n`);
 
-jsunit.files.forEach((file) => {
+petrol.files.forEach((file) => {
     try {
         let testMethods = finder.find(file);
         let TestCases = new require(file).default;
         let instance = new TestCases;
 
-        if (jsunit.filter) {
-            testMethods = testMethods.filter(method => method.includes(jsunit.filter));
+        if (petrol.filter) {
+            testMethods = testMethods.filter(method => method.includes(petrol.filter));
         }
 
         describe(file.replace(process.cwd(), ''), () => {

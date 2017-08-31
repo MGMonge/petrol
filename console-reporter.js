@@ -76,7 +76,7 @@ module.exports = {
                 errors: result.failedExpectations,
             });
 
-            if (jsunit.stopOnFailure) {
+            if (petrol.stopOnFailure) {
                 this.jasmineDone();
                 process.exit();
             }
@@ -101,7 +101,7 @@ module.exports = {
             for (let error of this.failures[i].errors) {
                 console.log(pe.render(error));
 
-                if (jsunit.stopOnFailure) {
+                if (petrol.stopOnFailure) {
                     break;
                 }
             }

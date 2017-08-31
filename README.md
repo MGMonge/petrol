@@ -1,11 +1,53 @@
-# JSUnit
-A javascript unit testing tool inspired by the famous PHPUnit framework. This tool uses eclipse internally to run the tests.
-If you don't feel confortable with the sintax of the javascript testing frameworks out there this package is for you
+# Petrol JS
+
+A javascript unit testing tool designed to be simple, to install it and start writing tests. that's it. No webpack, No karma. No distractions.
+
+## Why does this package exist?
+
+The main reason this package exists is because **Vue js developers** needed a quick way to unit test their components. **Although Petrol can be used to test anything** Vue is its main focus.
+
+Petrol uses **Jasmine** internally to run the tests but the test files don't use the `describe()` and `it()` global methods. it has its own structure and assertion methods.
+
+## What can you do with this package?
+
+* Write tests in a class, extending the Petrol TestCase with all the assertion methods
+
+
+* Create custom TestCase classes, importing all the libraries you need there and keep your test classes clean
+
+
+* Run tests in the console, run them individually, filter them by name and stop them on first failures
+
+
+* Assert elements on vue component templates using the VueTestCase
+
+
+* Create test classes with the `petrol make:test` or `petrol make:vue` commands
+
+
+## The easiest way to try Petrol
+Clone the example repository and run the test suite
+
+```bash
+git clone https://github.com/MGMonge/petrol-example.git petrol_example
+
+cd petrol_example
+
+npm install
+
+./node_modules/petrol/bin/petrol tests/
+
+```
+
 
 ## Installation
 
 ```bash
-npm install --save-dev js-unit
+npm install --save-dev petrol
+```
+or
+```bash
+yarn add -D petrol
 ```
 
 ## Usage
@@ -15,7 +57,7 @@ Create a file named ExampleTest.js in the project `tests/` directory:
 
 
 ```javascript
-import TestCase from 'js-unit/core/TestCase';
+import TestCase from 'petrol/core/TestCase';
 
 export default class ExampleTest extends TestCase {
 
@@ -31,27 +73,28 @@ export default class ExampleTest extends TestCase {
 ### Run it
 
 ```bash
-./node_modules/js-unit/bin/jsunit
+./node_modules/petrol/bin/petrol
 ```
 
-JSUnit will run all files ending with `Test.js` in the specified directory, by default `tests/` directory.
+Petrol will run all files ending with `Test.js` in the specified directory, by default `tests/` directory.
 
 
 ## Documentation
 
 ### Structure of test files
-All Tests files need to be an exportable ES2015 class and must extends the JSunit TestCase
+All Tests files need to be an exportable ES2015 class and must extends the Petrol TestCase
 
 ```javascript
 // SomeTest.js
-import TestCase from 'js-unit/core/TestCase';
+import TestCase from 'petrol/core/TestCase';
 
 export default class SomeTest extends TestCase {}
 ```
 
-JSUnit will run all the methods starting with the word `test` or with the block comment `/** @test */` above as an individual test.
+Petrol will run all the methods starting with the word `test` or with the block comment `/** @test */` above as an individual test.
 ```javascript
-import TestCase from 'js-unit/core/TestCase';
+// SomeTest.js
+import TestCase from 'petrol/core/TestCase';
 
 export default class SomeTest extends TestCase {
 
@@ -74,19 +117,19 @@ export default class SomeTest extends TestCase {
 ### Run test files individually
 
 ```bash
-./node_modules/js-unit/bin/jsunit tests/SomeTest.js
+./node_modules/petrol/bin/petrol tests/SomeTest.js
 ```
 
 ### Filter tests
 Run only `anotherTest()` from `SomeTest.js` file
 ```bash
-./node_modules/js-unit/bin/jsunit tests/SomeTest.js:anotherTest
+./node_modules/petrol/bin/petrol tests/SomeTest.js:anotherTest
 ```
 
 ### Stop on failure
 Stop running the tests after the first failure using the flag `--stop-on-failure` or `-f`
 ```bash
-./node_modules/js-unit/bin/jsunit tests/ -f
+./node_modules/petrol/bin/petrol tests/ -f
 ```
 
 ### Assertions
@@ -120,10 +163,30 @@ Used on objects, it asserts that two variables do not reference the same object.
 
 **expectsError(callback [, message])** Asserts that a script executed on callback throws an error.
 
+
+### VueTestCase Assertions
+**Important note:** It's necesary to mount the component using the test case method `mount()` to make assertions on its template.
+
+
+**click(selector)** It triggers a click event on element with given selector
+
+**assertNumberOfElements(selector, expected)** Assert the number of elements with given selector
+
+**assertElementContains(selector, needle)** Assert that element with given selector contains a needle
+
+**assertElementNotContains(selector, needle)** Assert that element with given selector does not contain a needle
+
+**assertElementExists(selector)** Assert that element with given selector exists
+
+**assertElementNotExists(selector)** Assert that element with given selector does not exist 
+
+**nextClick(selector)** An alias of `component.$nextTick()`
+
+
 ### Example of assertions
 
 ```javascript
-import TestCase from 'js-unit/core/TestCase';
+import TestCase from 'petrol/core/TestCase';
 
 export default class ExampleTest extends TestCase {
 
@@ -158,10 +221,10 @@ export default class ExampleTest extends TestCase {
 ```
 
 ### Before & after hooks
-JSUnit lets you register hooks that are run before and after your tests. This allows you to run setup and/or teardown code.
+Petrol lets you register hooks that are run before and after your tests. This allows you to run setup and/or teardown code.
 
 ```javascript
-import TestCase from 'js-unit/core/TestCase';
+import TestCase from 'petrol/core/TestCase';
 
 export default class SomeTest extends TestCase {
 
@@ -188,64 +251,69 @@ export default class SomeTest extends TestCase {
 This example is using the Vue js sintax. see https://github.com/vuejs/vue
 
 Lets say we have a vue component like this
-```javascript
-// ExampleComponent.js
-export default {
-    template: '<div></div>',
-
-    data() {
-        return {
-            foo: 'bar'
+```html
+// ExampleComponent.vue
+<template>
+	<div v-if="shouldShowAlert" class="alert">Warning</div>
+    <button v-on:click="showAlert()" class="alert-trigger">Click me!</button>
+</template>
+<script>
+  export default {
+      data() {
+          return {
+              shouldShowAlert : false
+          }
+      },
+      methods: {
+      	showAlert() {
+        	this.shouldShowAlert = true;
         }
-    }
-}
-
+      }
+  }
+</script>
 ```
 
 To create custom assertions you will need:
 1. Extend the TestCase
 ```javascript
-// VueTestCase.js
-import TestCase from 'js-unit/core/TestCase';
-// Import some dependencies
-import browserEnv from 'browser-env';
-import Vue from 'vue/dist/vue.js';
+// CustomVueTestCase.js
+import VueTestCase from 'petrol/core/VueTestCase';
 
-class VueTestCase extends TestCase {
-    before() {
-        // This is only an example. This package is to mock the browser environment
-        browserEnv();
-
-        global.Vue = Vue;
+class CustomVueTestCase extends VueTestCase {
+	// Custom assertion methods
+    
+    assertHasAlertMessages(expected, component) {
+        this.assertElementExist('.alert');
     }
-
-    assertDataEquals(expected, component) {
-        this.assertEquals(expected, JSON.parse(JSON.stringify(component.$data)));
+    
+    assertHasNotAlertMessages(expected, component) {
+        this.assertElementNotExist('.alert');
     }
 }
 
-export default VueTestCase;
+export default CustomVueTestCase;
 ```
 2. Import your custom TestCase
 ```javascript
 // ExampleComponentTest.js
-import VueTestCase from './VueTestCase';
+import CustomVueTestCase from './CustomVueTestCase';
 import ExampleComponent from './ExampleComponent';
 
-export default class ExampleComponentTest extends VueTestCase {
+export default class ExampleComponentTest extends CustomVueTestCase {
 
     beforeEach() {
-        this.SUT = new Vue(ExampleComponent).$mount();
+        this.SUT = this.mount(ExampleComponent);
     }
 
     /** @test */
-    it_initializes_correctly() {
-
-        let expected = {
-            foo: 'bar'
-        }
-
-       this.assertDataEquals(expected, this.SUT);
+    it_displays_an_alert_message() {
+    
+		this.assertHasNotAlertMessages();
+		this.click('.alert-trigger');
+		this.nextTick(() => {
+        	this.assertHasAlertMessages();
+        });
+        
     }
 }
 ```
@@ -286,16 +354,16 @@ Licensed using the [MIT license](http://opensource.org/licenses/MIT).
 ### Running the tests
 
 In order to contribute, you'll need to checkout the source from GitHub and
-install JSUnit's dependencies using npm:
+install Petrol's dependencies using npm:
 
 ```bash
-git clone https://github.com/mgmonge/jsunit.git
+git clone https://github.com/mgmonge/petrol.git
 npm install
 ```
 
-JSUnit is unit tested using its own core and tests should be on the `/core-tests` folder. Run
-the tests using the jsunit bash command:
+Petrol is unit tested using its own core and tests should be on the `/core-tests` folder. Run
+the tests using the petrol bash command:
 
 ```bash
-./bin/jsunit core-tests/
+./bin/petrol core-tests/
 ```

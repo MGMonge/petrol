@@ -1,4 +1,4 @@
-import VueTestCase from 'js-unit/core/VueTestCase';
+import VueTestCase from 'petrol/core/VueTestCase';
 
 export default class {{ name }} extends VueTestCase {
 

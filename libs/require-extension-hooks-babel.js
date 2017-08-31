@@ -1,6 +1,6 @@
 const babel = require('babel-core');
 const defaultConfig = {
-    exclude : [/node_modules\/(?!js-unit)/],
+    exclude : [/node_modules\/(?!petrol)/],
     presets : [
         ['env', {
             targets : {
