@@ -25,6 +25,9 @@ Petrol uses **Jasmine** internally to run the tests but the test files don't use
 * Create test classes with the `petrol make:test` or `petrol make:vue` commands
 
 
+![Demo](https://raw.githubusercontent.com/MGMonge/petrol/images/demo.gif)
+
+
 ## The easiest way to try Petrol
 Clone the [example](https://github.com/mgmonge/petrol-example) repository and run the test suite
 
