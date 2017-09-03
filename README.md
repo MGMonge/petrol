@@ -4,7 +4,7 @@ A javascript unit testing tool designed to be simple, to install it and start wr
 
 ## Why does this package exist?
 
-The main reason this package exists is because **Vue js developers** needed a quick way to unit test their components. **Although Petrol can be used to test anything** Vue is its main focus.
+**Although Petrol can be used to test anything** The main reason this package exists is because **Vue js developers** needed a quick way to unit test their components. 
 
 Petrol uses **Jasmine** internally to run the tests but the test files don't use the `describe()` and `it()` global methods. it has its own structure and assertion methods.
 
