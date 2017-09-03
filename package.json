@@ -29,11 +29,11 @@
     "node": ">=4"
   },
   "dependencies": {
-    "ava": "^0.22.0",
     "babel-core": "^6.21.0",
     "babel-preset-env": "^1.6.0",
     "colors": "^1.1.2",
     "commander": "^2.11.0",
+    "concordance": "^3.0.0",
     "esprima": "^4.0.0",
     "esprima-walk": "^0.1.0",
     "glob": "^7.1.2",

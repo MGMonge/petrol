@@ -1,5 +1,3 @@
-import {wrapAssertions} from "ava/lib/assert";
-
 class BaseTestCase {
 
     before() {
@@ -59,18 +57,6 @@ class BaseTestCase {
             return true;
         }
         fail(`Expected string, ${typeof value} given`);
-    }
-
-    get magicAssert() {
-        let assertion = {
-            pass() {
-            },
-            fail(ava, ex) {
-                fail(`\n${ex.message}\n${ex.values[0].formatted}`);
-            }
-        };
-
-        return wrapAssertions(assertion);
     }
 }
 

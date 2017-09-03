@@ -1,4 +1,5 @@
 import BaseTestCase from "../core/BaseTestCase";
+import concordance from "concordance";
 
 class TestCase extends BaseTestCase {
 
@@ -33,14 +34,20 @@ class TestCase extends BaseTestCase {
      * Asserts that two variables are equal.
      */
     assertEquals(expected, actual, message = '') {
-        this.magicAssert.deepEqual(actual, expected, message);
+        if (!concordance.compare(expected, actual).pass) {
+            fail(`${message}\n${concordance.diff(expected, actual)}`);
+        }
     }
 
     /**
      * Asserts that two variables are not equal.
      */
     assertNotEquals(expected, actual, message = '') {
-        return this.magicAssert.notDeepEqual(actual, expected, message);
+        if (concordance.compare(expected, actual).pass) {
+            let defaultMessage = `Expected value is equal to actual value`;
+
+            fail(message || defaultMessage);
+        }
     }
 
     /**
@@ -49,7 +56,13 @@ class TestCase extends BaseTestCase {
      * the same object.
      */
     assertSame(expected, actual, message = '') {
-        this.magicAssert.is(actual, expected, message);
+
+        if (!Object.is(expected, actual)) {
+
+            let defaultMessage = `Expected value is not the same than actual`;
+
+            fail(`${message || defaultMessage}\n${concordance.diff(expected, actual)}`);
+        }
     }
 
     /**
@@ -58,7 +71,12 @@ class TestCase extends BaseTestCase {
      * the same object.
      */
     assertNotSame(expected, actual, message = '') {
-        this.magicAssert.not(actual, expected, message);
+        if (Object.is(expected, actual)) {
+
+            let defaultMessage = `Expected value is the same than actual`;
+
+            fail(message || defaultMessage);
+        }
     }
 
     /**
@@ -67,7 +85,7 @@ class TestCase extends BaseTestCase {
     assertTrue(condition, message = '') {
         let defaultMessage = `Expected true, but got false`;
 
-        this.assertEquals(condition, true, message || defaultMessage);
+        this.assertEquals(true, condition, message || defaultMessage);
     }
 
     /**
@@ -125,6 +143,24 @@ class TestCase extends BaseTestCase {
         let defaultMessage = `Expected '${string}' to not contain '${needle}'`;
 
         this.assertFalse(string.includes(needle), message || defaultMessage);
+    }
+
+    /**
+     * Asserts that a value is null
+     */
+    assertNull(actual) {
+        let defaultMessage = `Expected null, but got ${typeof actual}`;
+
+        this.assertEquals(null, actual, message || defaultMessage);
+    }
+
+    /**
+     * Asserts that a value is not null
+     */
+    assertNotNull(actual) {
+        let defaultMessage = `Unexpected null value`;
+
+        this.assertNotEquals(null, actual, message || defaultMessage);
     }
 
     /**

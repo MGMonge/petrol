@@ -4,7 +4,7 @@ import PrettyError from 'pretty-error';
 Error.stackTraceLimit = Infinity;
 
 let pe = new PrettyError;
-pe.skipPackage('jasmine-core', 'vue');
+pe.skipPackage('petrol', 'jasmine', 'jasmine-core', 'vue');
 pe.skipPath('./core/BaseTestCase.js');
 pe.appendStyle({
     'pretty-error > trace > item' : {marginBottom: 0}
