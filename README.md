@@ -164,12 +164,19 @@ Used on objects, it asserts that two variables do not reference the same object.
 
 **assertNotContains(needle, string [, message])** Asserts that a string does not contain a needle.
 
+**assertNull(actual [, message])** Asserts that givel value is null.
+
+**assertNotNull(actual [, message])** Asserts that givel value is not null.
+
 **expectsError(callback [, message])** Asserts that a script executed on callback throws an error.
+
 
 
 ### VueTestCase Assertions
 **Important note:** It's necesary to mount the component using the test case method `mount()` to make assertions on its template.
 
+
+**mount(component [, props])** It mounts the vue components whith given props
 
 **click(selector)** It triggers a click event on element with given selector
 
