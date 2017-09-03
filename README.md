@@ -25,11 +25,14 @@ Petrol uses **Jasmine** internally to run the tests but the test files don't use
 * Create test classes with the `petrol make:test` or `petrol make:vue` commands
 
 
+![Demo](https://raw.githubusercontent.com/MGMonge/petrol/images/demo.gif)
+
+
 ## The easiest way to try Petrol
-Clone the example repository and run the test suite
+Clone the [example](https://github.com/mgmonge/petrol-example) repository and run the test suite
 
 ```bash
-git clone https://github.com/MGMonge/petrol-example.git petrol_example
+git clone https://github.com/mgmonge/petrol-example petrol_example
 
 cd petrol_example
 
@@ -98,7 +101,7 @@ import TestCase from 'petrol/core/TestCase';
 
 export default class SomeTest extends TestCase {
 
-	testFoo() {
+    testFoo() {
     	// assertions here
     }
 
@@ -228,7 +231,7 @@ import TestCase from 'petrol/core/TestCase';
 
 export default class SomeTest extends TestCase {
 
-	before() {
+    before() {
     	// this will be run before the first test of the file
     }
 
@@ -254,20 +257,24 @@ Lets say we have a vue component like this
 ```html
 // ExampleComponent.vue
 <template>
+    <div>
 	<div v-if="shouldShowAlert" class="alert">Warning</div>
-    <button v-on:click="showAlert()" class="alert-trigger">Click me!</button>
+    	<button v-on:click="showAlert()" class="alert-trigger">Click me!</button>
+    </div>
 </template>
 <script>
   export default {
+	
       data() {
           return {
               shouldShowAlert : false
           }
       },
-      methods: {
-      	showAlert() {
-        	this.shouldShowAlert = true;
-        }
+	
+      methods: 
+	  showAlert() {
+       	      this.shouldShowAlert = true;
+          }
       }
   }
 </script>
@@ -280,7 +287,7 @@ To create custom assertions you will need:
 import VueTestCase from 'petrol/core/VueTestCase';
 
 class CustomVueTestCase extends VueTestCase {
-	// Custom assertion methods
+    // Custom assertion methods
     
     assertHasAlertMessages(expected, component) {
         this.assertElementExist('.alert');
@@ -302,17 +309,16 @@ import ExampleComponent from './ExampleComponent';
 export default class ExampleComponentTest extends CustomVueTestCase {
 
     beforeEach() {
-        this.SUT = this.mount(ExampleComponent);
+	this.SUT = this.mount(ExampleComponent);
     }
 
     /** @test */
     it_displays_an_alert_message() {
-    
-		this.assertHasNotAlertMessages();
-		this.click('.alert-trigger');
-		this.nextTick(() => {
-        	this.assertHasAlertMessages();
-        });
+	this.assertHasNotAlertMessages();
+	this.click('.alert-trigger');
+	this.nextTick(() => {
+	    this.assertHasAlertMessages();
+	});
         
     }
 }
