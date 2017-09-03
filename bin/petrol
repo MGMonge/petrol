@@ -14,7 +14,7 @@ let registeredCommands = [
 ];
 
 program
-    .version('1.0.1')
+    .version('1.0.3')
     .command('make:test [name]', 'Generates a test file')
     .command('make:vue [name]', 'Generates a vue test file')
     .arguments('<path>')
