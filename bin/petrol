@@ -88,6 +88,7 @@ yargs
             jasmine.env.clearReporters();
             jasmine.addReporter(require('../console-reporter.js'));
             jasmine.execute([path.resolve(__dirname, '../start.js')]);
+            jasmine.stopSpecOnExpectationFailure(true);
 
         }).catch((failures) => {
             console.log(failures);

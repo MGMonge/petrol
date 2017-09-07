@@ -78,7 +78,7 @@ module.exports = {
         if (result.failedExpectations.length > 0) {
             this.failures.push({
                 test: result.fullName,
-                errors: result.failedExpectations,
+                error: result.failedExpectations[0],
             });
 
             if (petrol.stopOnFailure) {
@@ -113,13 +113,10 @@ module.exports = {
         for (let i = 0; i < this.failures.length; i++) {
             console.log(`${i + 1}) ${this.failures[i].test.yellow}`);
 
-            for (let error of this.failures[i].errors) {
+            this.renderError(this.failures[i].error)
 
-                this.renderError(error)
-
-                if (petrol.stopOnFailure) {
-                    break;
-                }
+            if (petrol.stopOnFailure) {
+                break;
             }
         }
 

@@ -7,7 +7,7 @@ class VueTestCase extends TestCase {
     mount(VueComponent, props = {}) {
         let Constructor = Vue.extend(VueComponent);
 
-        this.mounted = new Constructor({ propsData: props }).$mount();
+        this.mounted = new Constructor({propsData: props}).$mount();
 
         return this.mounted;
     }
@@ -39,11 +39,120 @@ class VueTestCase extends TestCase {
     }
 
     click(selector) {
+        let element = this.find(selector);
+
+        this.dispatchEvent(element, 'click');
+    }
+
+    fillField(selector, value) {
+        let element = this.find(selector);
+
+        if (!this.isInput(element) && !this.isTextarea(element)) {
+            fail(`Element [${selector}] must be an input or textarea`);
+        }
+
+        element.value = '';
+
+        for (let character of value) {
+            this.dispatchEvent(element, 'keydown');
+            element.value += character;
+            this.dispatchEvent(element, 'keypress');
+            this.dispatchEvent(element, 'keyup');
+        }
+
+        this.dispatchEvent(element, 'change');
+        this.dispatchEvent(element, 'input');
+    }
+
+    checkOption(selector) {
+        let element = this.find(selector);
+
+        if (!this.isCheckbox(element)) {
+            fail(`Element [${selector}] must be a checkbox`);
+        }
+
+        element.checked = true;
+
+        this.dispatchEvent(element, 'change');
+    }
+
+    uncheckOption(selector) {
+        let element = this.find(selector);
+
+        if (!this.isCheckbox(element)) {
+            fail(`Element [${selector}] must be a checkbox`);
+        }
+
+        element.checked = false;
+
+        this.dispatchEvent(element, 'change');
+    }
+
+    selectOption(selector, value) {
+        let element = this.find(selector);
+
+        if (!this.isSelect(element) && !this.isRadio(element)) {
+            fail(`Element [${selector}] must be a selector or a radio button`);
+        }
+
+        let options = this.isSelect(element) ? element.querySelectorAll('option') : this.findAll(selector);
+        let availableOptions = [];
+        let selectedOption = null;
+
+        for (let i = 0; i < options.length; i++) {
+
+            if (this.isRadio(element) && !this.isRadio(options[i])) {
+                continue;
+            }
+
+            if (options[i].value == value) {
+                selectedOption = options[i].value;
+
+                if (this.isSelect(element)) {
+                    options[i].selected = true;
+                } else {
+                    options[i].checked = true;
+                }
+
+                this.dispatchEvent(element, 'change');
+            }
+
+            availableOptions.push(`'${options[i].value}'`);
+        }
+
+        if (selectedOption == null) {
+            fail(`Option '${value}' not found on [${selector}] element. Available options: ${availableOptions.join(', ')}`);
+        }
+    }
+
+    isText(element) {
+        return this.isInput(element) && element.type.toLowerCase() == 'text';
+    }
+
+    isRadio(element) {
+        return this.isInput(element) && element.type.toLowerCase() == 'radio';
+    }
+
+    isCheckbox(element) {
+        return this.isInput(element) && element.type.toLowerCase() == 'checkbox';
+    }
+
+    isInput(element) {
+        return element && element.tagName == 'INPUT';
+    }
+
+    isSelect(element) {
+        return element && element.tagName == 'SELECT';
+    }
+
+    isTextarea(element) {
+        return element && element.tagName == 'TEXTAREA';
+    }
+
+    dispatchEvent(element, name) {
         var event = document.createEvent("HTMLEvents");
 
-        event.initEvent('click', true, true);
-
-        let element = this.find(selector);
+        event.initEvent(name, true, true);
 
         element.dispatchEvent(event);
     }
