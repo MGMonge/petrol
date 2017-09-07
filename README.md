@@ -38,7 +38,7 @@ cd petrol_example
 
 npm install
 
-./node_modules/petrol/bin/petrol tests/
+./node_modules/petrol/bin/petrol run
 
 ```
 
@@ -76,7 +76,7 @@ export default class ExampleTest extends TestCase {
 ### Run it
 
 ```bash
-./node_modules/petrol/bin/petrol
+./node_modules/petrol/bin/petrol run
 ```
 
 Petrol will run all files ending with `Test.js` in the specified directory, by default `tests/` directory.
@@ -120,19 +120,19 @@ export default class SomeTest extends TestCase {
 ### Run test files individually
 
 ```bash
-./node_modules/petrol/bin/petrol tests/SomeTest.js
+./node_modules/petrol/bin/petrol run tests/SomeTest.js
 ```
 
 ### Filter tests
 Run only `anotherTest()` from `SomeTest.js` file
 ```bash
-./node_modules/petrol/bin/petrol tests/SomeTest.js:anotherTest
+./node_modules/petrol/bin/petrol run tests/SomeTest.js:anotherTest
 ```
 
 ### Stop on failure
 Stop running the tests after the first failure using the flag `--stop-on-failure` or `-f`
 ```bash
-./node_modules/petrol/bin/petrol tests/ -f
+./node_modules/petrol/bin/petrol run tests/ -f
 ```
 
 ### Assertions
@@ -371,5 +371,5 @@ Petrol is unit tested using its own core and tests should be on the `/core-tests
 the tests using the petrol bash command:
 
 ```bash
-./bin/petrol core-tests/
+./bin/petrol run core-tests/
 ```

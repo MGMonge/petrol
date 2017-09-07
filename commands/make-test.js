@@ -5,9 +5,7 @@ let path = require('path');
 let mkdirp = require('mkdirp');
 
 module.exports = {
-    run(args = []) {
-        let name = args[3];
-
+    run(name) {
         if (typeof name === 'undefined') {
             console.error(`No test name was given`.bgRed);
 

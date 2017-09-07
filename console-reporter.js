@@ -1,14 +1,19 @@
 import "colors";
 import PrettyError from 'pretty-error';
 
-Error.stackTraceLimit = Infinity;
-
 let pe = new PrettyError;
-pe.skipPackage('petrol', 'jasmine', 'jasmine-core', 'vue');
-pe.skipPath('./core/BaseTestCase.js');
+
 pe.appendStyle({
     'pretty-error > trace > item' : {marginBottom: 0}
 });
+
+if (petrol.verbose == 1) {
+    pe.skipPackage('petrol', 'jasmine', 'jasmine-core', 'vue');
+}
+
+if (petrol.verbose > 1) {
+    Error.stackTraceLimit = Infinity;
+}
 
 module.exports = {
     total: 0,
@@ -87,6 +92,16 @@ module.exports = {
         return (new Date - start) / 1000;
     },
 
+    renderError(error) {
+        let message = error.message;
+
+        if (petrol.verbose) {
+            console.log(pe.render(error));
+        } else {
+            console.log(`${message}\n`.bold);
+        }
+    },
+
     jasmineDone() {
 
         console.log('-'.bold.repeat(process.stdout.columns - 1));
@@ -99,7 +114,8 @@ module.exports = {
             console.log(`${i + 1}) ${this.failures[i].test.yellow}`);
 
             for (let error of this.failures[i].errors) {
-                console.log(pe.render(error));
+
+                this.renderError(error)
 
                 if (petrol.stopOnFailure) {
                     break;

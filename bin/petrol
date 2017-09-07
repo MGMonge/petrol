@@ -2,72 +2,113 @@
 'use strict';
 global.__started_at = new Date;
 
-let program = require('commander');
 let glob = require('glob');
-let testsLocation = 'tests/**/*Test.js';
 let path = require('path');
 let jsdom = require('jsdom-light').jsdom;
 let petrol = {};
-let registeredCommands = [
-    'make:test',
-    'make:vue',
-];
 
-program
-    .version('1.0.3')
-    .command('make:test [name]', 'Generates a test file')
-    .command('make:vue [name]', 'Generates a vue test file')
-    .arguments('<path>')
-    .option('-f, --stop-on-failure', 'Stop execution upon first error or failure.')
-    .action((command, options) => {
-        if (registeredCommands.includes(command)) {
-            new require(`../commands/${command.replace(/:/, '-')}.js`).run(options.rawArgs);
-            process.exit();
-        }
-        testsLocation = command.endsWith('/') ? `${command}**/*Test.js` : command;
+let yargs = require('yargs');
+let version = require('../package.json').version;
+
+yargs
+    .usage(`Usage:\n  $0 <cmd> [args]`)
+    .option('version', {
+        alias: 'V',
+        type: 'boolean',
+        describe: 'Show version number',
     })
-    .parse(process.argv);
+    .option('stop-on-failure', {
+        alias: 'f',
+        type: 'boolean',
+        describe: 'Stop execution upon first error or failure.'
+    })
+    .option('help', {
+        alias: 'h',
+        type: 'boolean',
+        describe: 'Show help'
+    })
+    .option('verbose', {
+        alias: ['v', 'vv', 'vvv'],
+        type: 'count',
+        describe: 'Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug'
+    })
+    .command('run [path]', 'Run the tests', {}, function (argv) {
+        let testsLocation = '**/*Test.js';
 
-new Promise((resolve, reject) => {
-    petrol.filter = testsLocation.split(':')[1];
-
-    glob(testsLocation.split(':')[0], {absolute: true}, (errors, files) => {
-        if (errors) {
-            return reject(errors);
+        if (argv.path) {
+            testsLocation = argv.path.endsWith('/') ? `${argv.path}**/*Test.js` : argv.path;
         }
 
-        return resolve(files);
-    });
-}).then((files) => {
-    console.log(`Petrol Javascript Testing Framework\n`);
-    console.log(`Preparing files...`);
+        new Promise((resolve, reject) => {
+            petrol.filter = testsLocation.split(':')[1];
 
-    petrol.files = files;
-    petrol.stopOnFailure = program.stopOnFailure;
-    global.petrol = petrol;
-    global.document = jsdom('<html><head></head><body></body></html>');
-    global.window = global.document.defaultView;
+            glob(testsLocation.split(':')[0], {absolute: true}, (errors, files) => {
+                if (errors) {
+                    return reject(errors);
+                }
 
-    require('source-map-support').install({
-        environment: 'node',
-        handleUncaughtExceptions: false,
-        hookRequire: true
-    });
+                return resolve(files);
+            });
+        }).then((files) => {
+            console.log(`Petrol Javascript Testing Framework\n`);
+            console.log(`Preparing files...`);
 
-    const moduleAlias = require('module-alias');
-    const hooks = require('require-extension-hooks');
+            petrol.files = files;
+            petrol.stopOnFailure = program['stop-on-failure'];
+            petrol.verbose = program['verbose'];
+            global.petrol = petrol;
+            global.document = jsdom('<html><head></head><body></body></html>');
+            global.window = global.document.defaultView;
 
-    moduleAlias.addAlias('vue', 'vue/dist/vue.min');
-    hooks('vue').plugin('vue').push();
-    hooks(['vue', 'js']).plugin(path.resolve(__dirname, '../libs/require-extension-hooks-babel.js')).push();
+            require('source-map-support').install({
+                environment: 'node',
+                handleUncaughtExceptions: false,
+                hookRequire: true
+            });
 
-    var Jasmine = require('jasmine');
-    var jasmine = new Jasmine();
+            const moduleAlias = require('module-alias');
+            const hooks = require('require-extension-hooks');
 
-    jasmine.env.clearReporters();
-    jasmine.addReporter(require('../console-reporter.js'));
-    jasmine.execute([path.resolve(__dirname, '../start.js')]);
+            moduleAlias.addAlias('vue', 'vue/dist/vue.min');
+            hooks('vue').plugin('vue').push();
+            hooks(['vue', 'js']).plugin(path.resolve(__dirname, '../libs/require-extension-hooks-babel.js')).push();
 
-}).catch((failures) => {
-    console.log(failures);
-})
+            var Jasmine = require('jasmine');
+            var jasmine = new Jasmine();
+
+            jasmine.env.clearReporters();
+            jasmine.addReporter(require('../console-reporter.js'));
+            jasmine.execute([path.resolve(__dirname, '../start.js')]);
+
+        }).catch((failures) => {
+            console.log(failures);
+        })
+
+    })
+    .command('make:test [name]', 'Create a test', {}, function (argv) {
+        let command = new require(`../commands/make-test.js`);
+
+        command.run(argv.name);
+    })
+    .command('make:vue [name]', 'Create a vue test', {}, function (argv) {
+        let command = new require(`../commands/make-vue.js`);
+
+        command.run(argv.name);
+    })
+    .version()
+    .help()
+    .strict();
+
+yargs.getOptions().boolean = [];
+yargs.getOptions().count = [];
+
+let program = yargs.argv;
+
+if (program.version) {
+    console.log(version);
+}
+
+if (process.argv.length <= 2 || program.help) {
+    yargs.showHelp();
+}
+
