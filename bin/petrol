@@ -94,13 +94,15 @@ yargs
         })
 
     })
-    .command('make:test [name]', 'Create a test', {}, function (argv) {
-        let command = new require(`../commands/make-test.js`);
-
-        command.run(argv.name);
-    })
-    .command('make:vue [name]', 'Create a vue test', {}, function (argv) {
-        let command = new require(`../commands/make-vue.js`);
+    .command('make:test [name]', 'Create a test', (yargs) => {
+        yargs.option('for', {
+          describe: 'Create a testcase for a specific framework. The default is a framework agnostic TestCase',
+          default: 'default',
+          choices: ['default', 'vue']
+        })
+    }, function (argv) {
+        let commandName = argv.for == 'default' ? 'test' : argv.for;
+        let command = new require(`../commands/make-${commandName}.js`);
 
         command.run(argv.name);
     })
