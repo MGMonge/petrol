@@ -171,28 +171,6 @@ Used on objects, it asserts that two variables do not reference the same object.
 **expectsError(callback [, message])** Asserts that a script executed on callback throws an error.
 
 
-
-### VueTestCase Assertions
-**Important note:** It's necesary to mount the component using the test case method `mount()` to make assertions on its template.
-
-
-**mount(component [, props])** It mounts the vue components whith given props
-
-**click(selector)** It triggers a click event on element with given selector
-
-**assertNumberOfElements(selector, expected)** Assert the number of elements with given selector
-
-**assertElementContains(selector, needle)** Assert that element with given selector contains a needle
-
-**assertElementNotContains(selector, needle)** Assert that element with given selector does not contain a needle
-
-**assertElementExists(selector)** Assert that element with given selector exists
-
-**assertElementNotExists(selector)** Assert that element with given selector does not exist 
-
-**nextClick(selector)** An alias of `component.$nextTick()`
-
-
 ### Example of assertions
 
 ```javascript
@@ -227,6 +205,112 @@ export default class ExampleTest extends TestCase {
         });
     }
 
+}
+
+```
+
+### VueTestCase Assertions
+**Important note:** It's necesary to mount the component using the test case method `mount()` to make assertions on its template.
+
+
+**mount(component [, props])** It mounts the vue components whith given props
+
+**click(selector)** It triggers a click event on element with given selector
+
+**fillField(selector, value)** Set given value to element with given selector. Element must be an input or textarea
+
+**checkOption(selector)** Checks element with given selector. Element must be a checkbox
+
+**uncheckOption(selector)** Unchecks element with given selector. Element must be a checkbox
+
+**selectOption(selector, value)** Set given value from element with given selector. Element must be a selector or radio button
+
+**assertNumberOfElements(selector, expected)** Assert the number of elements with given selector
+
+**assertElementContains(selector, needle)** Assert that element with given selector contains a needle
+
+**assertElementNotContains(selector, needle)** Assert that element with given selector does not contain a needle
+
+**assertElementExists(selector)** Assert that element with given selector exists
+
+**assertElementNotExists(selector)** Assert that element with given selector does not exist 
+
+**nextClick(selector)** An alias of `component.$nextTick()`
+
+
+### Example of VueTestCase assertions
+
+```html
+// Form.vue
+<template>
+    <div>
+        <form action="#">
+            <input type="text" v-model="form.email" class="email" />
+            <input type="password" v-model="form.password" class="password" />
+            <textarea v-model="form.message" class="message"></textarea>
+            <input type="checkbox" v-model="form.terms" class="terms"> Accept Terms
+            <select v-model="form.method" class="method">
+                <option value="">Select method</option>
+                <option value="GET">GET</option>
+                <option value="POST">POST</option>
+                <option value="PUT">PUT</option>
+                <option value="DELETE">DELETE</option>
+            </select>
+            <input type="radio" class="active" v-model="form.active" value="Yes"> Yes
+            <input type="radio" class="active" v-model="form.active" value="No"> No
+        </form>
+    </div>
+</template>
+<script>
+    export default {
+        data() {
+            return {
+                form: {
+                    email: '',
+                    password: '',
+                    terms: false,
+                    select: '',
+                    radio: 'No'
+                }
+            }
+        }
+    }
+</script>
+```
+
+```javascript
+// FormTest.js
+import Form from "../src/Form.vue";
+import VueTestCase from "petrol/core/VueTestCase.js";
+
+export default class ExampleVueTest extends VueTestCase {
+    beforeEach() {
+        this.SUT = this.mount(Form);
+    }
+
+    /** @test */
+    async it_populates_the_form() {
+        this.fillField('.email', 'maxi@sneekdigital.co.uk');
+        this.fillField('.password', '123456');
+        this.fillField('.message', 'This is a message');
+        this.checkOption('.terms');
+        this.selectOption('.method', 'POST');
+        this.selectOption('.active', 'Yes');
+
+        await this.nextTick();
+
+        this.assertEquals('maxi@sneekdigital.co.uk', this.SUT.form.email);
+        this.assertEquals('123456', this.SUT.form.password);
+        this.assertEquals('This is a message', this.SUT.form.message);
+        this.assertTrue(this.SUT.form.terms);
+        this.assertEquals('POST', this.SUT.form.method);
+        this.assertEquals('Yes', this.SUT.form.active);
+
+        this.uncheckOption('.terms');
+        await this.nextTick();
+
+        this.assertFalse(this.SUT.form.terms);
+    }
 }
 ```
 
