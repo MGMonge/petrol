@@ -27,7 +27,7 @@ class TestCase extends BaseTestCase {
 
         let defaultMessage = `Expected ${expectedCount} elements, but found ${haystack.length}`;
 
-        this.assertEquals(haystack.length, expectedCount, message || defaultMessage);
+        this.assertEquals(expectedCount, haystack.length, message || defaultMessage);
     }
 
     /**
