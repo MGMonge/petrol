@@ -40,7 +40,6 @@ cd petrol_example
 npm install
 
 ./node_modules/petrol/bin/petrol run
-
 ```
 
 
@@ -266,7 +265,7 @@ Lets say we have a vue component like this
 // ExampleComponent.vue
 <template>
     <div>
-    <div v-if="shouldShowAlert" class="alert">Warning</div>
+        <div v-if="shouldShowAlert" class="alert">Warning</div>
         <button v-on:click="showAlert()" class="alert-trigger">Click me!</button>
     </div>
 </template>
@@ -280,7 +279,7 @@ Lets say we have a vue component like this
       },
     
       methods: 
-      showAlert() {
+        showAlert() {
               this.shouldShowAlert = true;
           }
       }
@@ -296,7 +295,6 @@ import VueTestCase from 'petrol/core/VueTestCase';
 
 class CustomVueTestCase extends VueTestCase {
     // Custom assertion methods
-    
     assertHasAlertMessages(expected, component) {
         this.assertElementExist('.alert');
     }
@@ -317,17 +315,16 @@ import ExampleComponent from './ExampleComponent';
 export default class ExampleComponentTest extends CustomVueTestCase {
 
     beforeEach() {
-    this.SUT = this.mount(ExampleComponent);
+        this.SUT = this.mount(ExampleComponent);
     }
 
     /** @test */
     it_displays_an_alert_message() {
-    this.assertHasNotAlertMessages();
-    this.click('.alert-trigger');
-    this.nextTick(() => {
-        this.assertHasAlertMessages();
-    });
-        
+        this.assertHasNotAlertMessages();
+        this.click('.alert-trigger');
+        this.nextTick(() => {
+            this.assertHasAlertMessages();
+        });
     }
 }
 ```
