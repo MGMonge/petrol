@@ -22,7 +22,8 @@ Petrol uses **Jasmine** internally to run the tests but the test files don't use
 * Assert elements on vue component templates using the VueTestCase
 
 
-* Create test classes with the `petrol make:test` or `petrol make:vue` commands
+* Create test classes with the `petrol make:test` command. Run `petrol help make:test` for additional options. 
+    * You can create VueJS tests using the `--for=vue` option.  
 
 
 ![Demo](https://raw.githubusercontent.com/MGMonge/petrol/images/demo.gif)
@@ -102,16 +103,16 @@ import TestCase from 'petrol/core/TestCase';
 export default class SomeTest extends TestCase {
 
     testFoo() {
-    	// assertions here
+        // assertions here
     }
 
     /** @test */
     anotherTest() {
-    	// assertions here
+        // assertions here
     }
 
     someOtherMethod() {
-    	// this won't be run
+        // this won't be run
     }
 
 }
@@ -239,19 +240,19 @@ import TestCase from 'petrol/core/TestCase';
 export default class SomeTest extends TestCase {
 
     before() {
-    	// this will be run before the first test of the file
+        // this will be run before the first test of the file
     }
 
     baforeEach() {
-    	// this will be run before each test
+        // this will be run before each test
     }
 
     after() {
-    	// this will be run after the last test of the file
+        // this will be run after the last test of the file
     }
 
     afterEach() {
-    	// this will be run after the each test
+        // this will be run after the each test
     }
 
 }
@@ -265,22 +266,22 @@ Lets say we have a vue component like this
 // ExampleComponent.vue
 <template>
     <div>
-	<div v-if="shouldShowAlert" class="alert">Warning</div>
-    	<button v-on:click="showAlert()" class="alert-trigger">Click me!</button>
+    <div v-if="shouldShowAlert" class="alert">Warning</div>
+        <button v-on:click="showAlert()" class="alert-trigger">Click me!</button>
     </div>
 </template>
 <script>
   export default {
-	
+    
       data() {
           return {
               shouldShowAlert : false
           }
       },
-	
+    
       methods: 
-	  showAlert() {
-       	      this.shouldShowAlert = true;
+      showAlert() {
+              this.shouldShowAlert = true;
           }
       }
   }
@@ -316,16 +317,16 @@ import ExampleComponent from './ExampleComponent';
 export default class ExampleComponentTest extends CustomVueTestCase {
 
     beforeEach() {
-	this.SUT = this.mount(ExampleComponent);
+    this.SUT = this.mount(ExampleComponent);
     }
 
     /** @test */
     it_displays_an_alert_message() {
-	this.assertHasNotAlertMessages();
-	this.click('.alert-trigger');
-	this.nextTick(() => {
-	    this.assertHasAlertMessages();
-	});
+    this.assertHasNotAlertMessages();
+    this.click('.alert-trigger');
+    this.nextTick(() => {
+        this.assertHasAlertMessages();
+    });
         
     }
 }
