@@ -1,10 +1,10 @@
 # Petrol JS
 
-A javascript unit testing tool designed to be simple, to install it and start writing tests. that's it. No webpack, No karma. No distractions.
+A javascript unit testing tool designed to be simple, install it and start writing tests straight away... that's it. No webpack, No karma. No distractions.
 
 ## Why does this package exist?
 
-The main reason this package exists is because **Vue js developers** needed a quick way to unit test their components. **Although Petrol can be used to test anything** Vue is its main focus.
+**Although Petrol can be used to test anything** the main reason this package exists is because **Vue js developers** needed a quick way to unit test their components. 
 
 Petrol uses **Jasmine** internally to run the tests but the test files don't use the `describe()` and `it()` global methods. it has its own structure and assertion methods.
 
@@ -164,12 +164,19 @@ Used on objects, it asserts that two variables do not reference the same object.
 
 **assertNotContains(needle, string [, message])** Asserts that a string does not contain a needle.
 
+**assertNull(actual [, message])** Asserts that givel value is null.
+
+**assertNotNull(actual [, message])** Asserts that givel value is not null.
+
 **expectsError(callback [, message])** Asserts that a script executed on callback throws an error.
+
 
 
 ### VueTestCase Assertions
 **Important note:** It's necesary to mount the component using the test case method `mount()` to make assertions on its template.
 
+
+**mount(component [, props])** It mounts the vue components whith given props
 
 **click(selector)** It triggers a click event on element with given selector
 
