@@ -2,12 +2,6 @@
 
 A javascript unit testing tool designed to be simple, install it and start writing tests straight away... that's it. No webpack, No karma. No distractions.
 
-## Why does this package exist?
-
-**Although Petrol can be used to test anything** the main reason this package exists is because **Vue js developers** needed a quick way to unit test their components. 
-
-Petrol uses **Jasmine** internally to run the tests but the test files don't use the `describe()` and `it()` global methods. it has its own structure and assertion methods.
-
 ## What can you do with this package?
 
 * Write tests in a class, extending the Petrol TestCase with all the assertion methods
