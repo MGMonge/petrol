@@ -235,7 +235,7 @@ export default class ExampleTest extends TestCase {
 
 **assertElementNotExists(selector)** Assert that element with given selector does not exist 
 
-**nextClick(selector)** An alias of `component.$nextTick()`
+**nextTick(callback)** An alias of `$nextTick()` from mounted component
 
 
 ### Example of VueTestCase assertions
@@ -269,8 +269,8 @@ export default class ExampleTest extends TestCase {
                     email: '',
                     password: '',
                     terms: false,
-                    select: '',
-                    radio: 'No'
+                    method: 'GET',
+                    active: 'No'
                 }
             }
         }
