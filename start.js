@@ -15,6 +15,16 @@ petrol.files.forEach((file) => {
             testMethods = testMethods.filter(method => method.includes(petrol.filter));
         }
 
+        // Temp hack to get transitions on jsdom working, till jsdom implements a proper fix
+        window.getComputedStyle = () => {
+            return {
+                transitionDelay: '',
+                animationDelay: '',
+                transitionDuration: '',
+                animationDuration: '',
+            };
+        };
+
         describe(file.replace(process.cwd(), ''), () => {
             beforeAll(() => instance.before());
             beforeEach(() => instance.beforeEach());

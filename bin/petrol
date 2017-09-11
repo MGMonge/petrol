@@ -60,15 +60,6 @@ yargs
             global.document = jsdom('<html><head></head><body></body></html>');
             global.window = global.document.defaultView;
 
-            window.getComputedStyle = () => {
-                return {
-                    transitionDelay: '',
-                    animationDelay: '',
-                    transitionDuration: '',
-                    animationDuration: '',
-                };
-            };
-
             require('source-map-support').install({
                 environment: 'node',
                 handleUncaughtExceptions: false,
