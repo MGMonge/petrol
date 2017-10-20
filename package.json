@@ -1,6 +1,6 @@
 {
   "name": "petrol",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "A javascript unit testing tool designed to be simple, to install it and start writing tests. that's it. No webpack, No karma. No distractions.",
   "license": "MIT",
   "repository": "https://github.com/mgmonge/petrol",

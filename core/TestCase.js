@@ -148,7 +148,7 @@ class TestCase extends BaseTestCase {
     /**
      * Asserts that a value is null
      */
-    assertNull(actual) {
+    assertNull(actual, message = '') {
         let defaultMessage = `Expected null, but got ${typeof actual}`;
 
         this.assertEquals(null, actual, message || defaultMessage);
@@ -157,7 +157,7 @@ class TestCase extends BaseTestCase {
     /**
      * Asserts that a value is not null
      */
-    assertNotNull(actual) {
+    assertNotNull(actual, message = '') {
         let defaultMessage = `Unexpected null value`;
 
         this.assertNotEquals(null, actual, message || defaultMessage);
