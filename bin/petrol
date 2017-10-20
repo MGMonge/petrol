@@ -4,7 +4,6 @@ global.__started_at = new Date;
 
 let glob = require('glob');
 let path = require('path');
-let jsdom = require('jsdom-light').jsdom;
 let petrol = {};
 
 let yargs = require('yargs');
@@ -53,12 +52,12 @@ yargs
             console.log(`Petrol Javascript Testing Framework\n`);
             console.log(`Preparing files...`);
 
+            require('jsdom-global')();
+
             petrol.files = files;
             petrol.stopOnFailure = program['stop-on-failure'];
             petrol.verbose = program['verbose'];
             global.petrol = petrol;
-            global.document = jsdom('<html><head></head><body></body></html>');
-            global.window = global.document.defaultView;
 
             require('source-map-support').install({
                 environment: 'node',
