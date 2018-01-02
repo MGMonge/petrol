@@ -1,13 +1,22 @@
 import TestCase from "./TestCase.js";
+import { mount } from 'vue-test-utils'
 import Vue from "vue";
 global.Vue = Vue;
 
 class VueTestCase extends TestCase {
 
-    mount(VueComponent, props = {}) {
-        let Constructor = Vue.extend(VueComponent);
+    // mount(VueComponent, props = {}) {
+    //     let Constructor = Vue.extend(VueComponent);
 
-        this.mounted = new Constructor({propsData: props}).$mount();
+    //     this.mounted = new Constructor({propsData: props}).$mount();
+
+    //     return this.mounted;
+    // }
+
+    mount(VueComponent, props = {}) {
+        this.mounted = mount(VueComponent, {
+            propsData: props
+        })
 
         return this.mounted;
     }
