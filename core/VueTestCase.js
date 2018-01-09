@@ -5,14 +5,6 @@ global.Vue = Vue;
 
 class VueTestCase extends TestCase {
 
-    // mount(VueComponent, props = {}) {
-    //     let Constructor = Vue.extend(VueComponent);
-
-    //     this.mounted = new Constructor({propsData: props}).$mount();
-
-    //     return this.mounted;
-    // }
-
     mount(VueComponent, props = {}) {
         this.mounted = mount(VueComponent, {
             propsData: props
