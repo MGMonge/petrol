@@ -167,11 +167,11 @@ class VueTestCase extends TestCase {
     }
 
     findAll(selector) {
-        return this.mounted.$el.querySelectorAll(selector);
+        return this.mounted.vm.$el.querySelectorAll(selector);
     }
 
     find(selector) {
-        let element = this.mounted.$el.querySelector(selector);
+        let element = this.mounted.vm.$el.querySelector(selector);
 
         if (!element) {
             fail(`Element [${selector}] was not found`);
