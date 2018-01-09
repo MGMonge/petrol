@@ -58,4 +58,12 @@ export default class VueTestCaseTest extends TestCase {
         this.assertEquals('NodeList', elements.constructor.name)
         this.assertCount(3, elements)
     }
+
+    /** @test */
+    it_can_go_to_the_next_dom_cycle() {
+        const vueTestCase = new VueTestCase
+        const wrapper = vueTestCase.mount(ExampleComponent)
+
+        vueTestCase.nextTick()
+    }
 }

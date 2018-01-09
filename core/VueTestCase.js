@@ -173,7 +173,7 @@ class VueTestCase extends TestCase {
     }
 
     nextTick() {
-        this.SUT.$nextTick();
+        this.mounted.vm.$nextTick();
     }
 }
 
