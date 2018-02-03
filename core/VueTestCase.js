@@ -172,8 +172,8 @@ class VueTestCase extends TestCase {
         return element;
     }
 
-    nextTick() {
-        this.wrapper.vm.$nextTick();
+    nextTick(callback) {
+        this.wrapper.vm.$nextTick(callback);
     }
 }
 
