@@ -69,6 +69,7 @@ yargs
             const hooks = require('require-extension-hooks');
 
             moduleAlias.addAlias('vue', 'vue/dist/vue.min');
+
             hooks('vue').plugin('vue').push();
             hooks(['vue', 'js']).plugin(path.resolve(__dirname, '../libs/require-extension-hooks-babel.js')).push();
 

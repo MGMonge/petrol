@@ -1,3 +1,5 @@
+import {AssertionError} from 'assert';
+
 class BaseTestCase {
 
     before() {
@@ -20,7 +22,7 @@ class BaseTestCase {
         try {
             new value;
         } catch (e) {
-            fail(`Expected constructor, ${typeof value} given`);
+            throw new AssertionError({message: `Expected constructor, ${typeof value} given`});
         }
     }
 
@@ -28,35 +30,41 @@ class BaseTestCase {
         if (typeof value === 'object') {
             return true;
         }
-        fail(`Expected object, ${typeof value} given`);
+
+        throw new AssertionError({message: `Expected object, ${typeof value} given`});
     }
 
     assertInteger(value) {
         if (typeof value === 'number' && value == parseInt(value, 10)) {
             return true;
         }
-        fail(`Expected integer, ${typeof value} given`);
+
+        throw new AssertionError({message: `Expected integer, ${typeof value} given`});
     }
 
     assertArray(value) {
         if (value instanceof Array) {
             return true;
         }
-        fail(`Expected array, ${typeof value} given`);
+
+        throw new AssertionError({message: `Expected array, ${typeof value} given`});
     }
 
     assertFunction(value) {
         if (typeof value === 'function') {
             return true;
         }
-        fail(`Expected function, ${typeof value} given`);
+
+        throw new AssertionError({message: `Expected function, ${typeof value} given`});
     }
 
     assertString(value) {
         if (typeof value === 'string') {
             return true;
         }
-        fail(`Expected string, ${typeof value} given`);
+
+        throw new AssertionError({message: `Expected string, ${typeof value} given`});
+
     }
 }
 
