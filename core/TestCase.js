@@ -1,5 +1,6 @@
 import BaseTestCase from "../core/BaseTestCase";
 import concordance from "concordance";
+import {AssertionError} from 'assert';
 
 class TestCase extends BaseTestCase {
 
@@ -7,12 +8,12 @@ class TestCase extends BaseTestCase {
      * Asserts that a variable is of a given type.
      */
     assertInstanceOf(expected, actual, message = '') {
-        this.assertConstructor(expected);
+        this.assertString(expected);
         this.assertObject(actual);
 
-        let defaultMessage = `Expected object to be instance of [${expected.name}], ${actual.constructor.name} given ${message}`;
+        let defaultMessage = `Expected object to be instance of [${expected}], ${actual.constructor.name} given`;
 
-        this.assertTrue(actual instanceof expected, message || defaultMessage);
+        this.assertTrue(actual.constructor.name == expected, message || defaultMessage);
     }
 
     /**
@@ -22,7 +23,7 @@ class TestCase extends BaseTestCase {
         this.assertInteger(expectedCount);
 
         if (typeof haystack.length == 'undefined') {
-            fail('The second argument of assertCount() must have length property');
+            throw new Error('The second argument of assertCount() must have length property');
         }
 
         let defaultMessage = `Expected ${expectedCount} elements, but found ${haystack.length}`;
@@ -35,7 +36,7 @@ class TestCase extends BaseTestCase {
      */
     assertEquals(expected, actual, message = '') {
         if (!concordance.compare(expected, actual).pass) {
-            fail(`${message}\n${concordance.diff(expected, actual)}`);
+            throw new AssertionError({message : `${message}\n${concordance.diff(expected, actual)}`});
         }
     }
 
@@ -46,7 +47,7 @@ class TestCase extends BaseTestCase {
         if (concordance.compare(expected, actual).pass) {
             let defaultMessage = `Expected value is equal to actual value`;
 
-            fail(message || defaultMessage);
+            throw new AssertionError({message: message || defaultMessage});
         }
     }
 
@@ -61,7 +62,7 @@ class TestCase extends BaseTestCase {
 
             let defaultMessage = `Expected value is not the same than actual`;
 
-            fail(`${message || defaultMessage}\n${concordance.diff(expected, actual)}`);
+            throw new AssertionError({message: `${message || defaultMessage}\n${concordance.diff(expected, actual)}`});
         }
     }
 
@@ -75,7 +76,7 @@ class TestCase extends BaseTestCase {
 
             let defaultMessage = `Expected value is the same than actual`;
 
-            fail(message || defaultMessage);
+            throw new AssertionError({message: message || defaultMessage});
         }
     }
 
@@ -173,11 +174,11 @@ class TestCase extends BaseTestCase {
 
         try {
             callback();
-
-            fail(message || defaultMessage);
         } catch (e) {
-
+            return;
         }
+
+        throw new AssertionError({message: message || defaultMessage});
     }
 }
 

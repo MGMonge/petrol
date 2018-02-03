@@ -1,6 +1,7 @@
 /.idea
 /node_modules
 /core-tests
+/examples
 
 .npm-debug.log
 .yarn-error.log

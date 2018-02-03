@@ -2,6 +2,7 @@
 /node_modules
 /src
 /tests/*
+/examples
 
 .npm-debug.log
 .yarn-error.log

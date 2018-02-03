@@ -1,6 +1,6 @@
 {
   "name": "petrol",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "A javascript unit testing tool designed to be simple, to install it and start writing tests. that's it. No webpack, No karma. No distractions.",
   "license": "MIT",
   "repository": "https://github.com/mgmonge/petrol",
@@ -29,7 +29,7 @@
     "node": ">=4"
   },
   "scripts": {
-    "test": "./bin/petrol run core-tests/VueTestCaseTest.js"
+    "test": "./bin/petrol run core-tests/"
   },
   "dependencies": {
     "babel-core": "^6.21.0",
@@ -48,7 +48,7 @@
     "require-extension-hooks": "^0.3.0",
     "require-extension-hooks-vue": "^0.4.0",
     "source-map-support": "^0.4.16",
-    "vue": "^2.4.2",
+    "vue": "2.4.2",
     "vue-test-utils": "^1.0.0-beta.9",
     "yargs": "^8.0.2"
   }

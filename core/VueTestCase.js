@@ -1,16 +1,14 @@
 import TestCase from "./TestCase.js";
-import { mount } from 'vue-test-utils'
-import Vue from "vue";
-global.Vue = Vue;
+import { mount } from 'vue-test-utils';
 
 class VueTestCase extends TestCase {
 
     mount(VueComponent, props = {}) {
-        this.mounted = mount(VueComponent, {
+        this.wrapper = mount(VueComponent, {
             propsData: props
         })
 
-        return this.mounted;
+        return this.wrapper;
     }
 
     assertNumberOfElements(selector, expected) {
@@ -20,15 +18,15 @@ class VueTestCase extends TestCase {
     }
 
     assertElementContains(selector, needle) {
-        let element = this.find(selector);
+        let wrapper = this.find(selector);
 
-        this.assertContains(needle, element.innerHTML);
+        this.assertContains(needle, wrapper.html());
     }
 
     assertElementNotContains(selector, needle) {
-        let element = this.find(selector);
+        let wrapper = this.find(selector);
 
-        this.assertNotContains(needle, element.innerHTML);
+        this.assertNotContains(needle, wrapper.html());
     }
 
     assertElementExists(selector) {
@@ -40,16 +38,15 @@ class VueTestCase extends TestCase {
     }
 
     click(selector) {
-        let element = this.find(selector);
-
-        this.dispatchEvent(element, 'click');
+        this.find(selector).trigger('click');
     }
 
     fillField(selector, value) {
-        let element = this.find(selector);
+        let wrapper = this.find(selector);
+        let element = wrapper.element;
 
         if (!this.isInput(element) && !this.isTextarea(element)) {
-            fail(`Element [${selector}] must be an input or textarea`);
+            throw new Error(`Element [${selector}] must be an input or textarea`);
         }
 
         element.value = '';
@@ -63,66 +60,69 @@ class VueTestCase extends TestCase {
 
         this.dispatchEvent(element, 'change');
         this.dispatchEvent(element, 'input');
+
     }
 
     checkOption(selector) {
-        let element = this.find(selector);
+        let wrapper = this.find(selector);
 
-        if (!this.isCheckbox(element)) {
+        if (!this.isCheckbox(wrapper.element)) {
             fail(`Element [${selector}] must be a checkbox`);
         }
 
-        element.checked = true;
+        wrapper.element.checked = true;
 
-        this.dispatchEvent(element, 'change');
+        wrapper.trigger('change');
     }
 
     uncheckOption(selector) {
-        let element = this.find(selector);
+        let wrapper = this.find(selector);
 
-        if (!this.isCheckbox(element)) {
-            fail(`Element [${selector}] must be a checkbox`);
+        if (!this.isCheckbox(wrapper.element)) {
+            throw new Error(`Element [${selector}] must be a checkbox`);
         }
 
-        element.checked = false;
+        wrapper.element.checked = false;
 
-        this.dispatchEvent(element, 'change');
+        wrapper.trigger('change');
     }
 
     selectOption(selector, value) {
-        let element = this.find(selector);
+        let wrapper = this.find(selector);
+        let element = wrapper.element;
 
         if (!this.isSelect(element) && !this.isRadio(element)) {
             fail(`Element [${selector}] must be a selector or a radio button`);
         }
 
-        let options = this.isSelect(element) ? element.querySelectorAll('option') : this.findAll(selector);
+        let options = this.isSelect(element) ? wrapper.findAll('option') : this.findAll(selector);
+
         let availableOptions = [];
         let selectedOption = null;
 
         for (let i = 0; i < options.length; i++) {
 
-            if (this.isRadio(element) && !this.isRadio(options[i])) {
+            if (this.isRadio(element) && !this.isRadio(options.wrappers[i].element)) {
                 continue;
             }
 
-            if (options[i].value == value) {
-                selectedOption = options[i].value;
+            if (options.wrappers[i].element.value == value) {
+                selectedOption = options.wrappers[i].element.value;
 
                 if (this.isSelect(element)) {
-                    options[i].selected = true;
+                    options.wrappers[i].element.selected = true;
                 } else {
-                    options[i].checked = true;
+                    options.wrappers[i].element.checked = true;
                 }
 
-                this.dispatchEvent(element, 'change');
+                wrapper.trigger('change');
             }
 
-            availableOptions.push(`'${options[i].value}'`);
+            availableOptions.push(`'${options.wrappers[i].element.value}'`);
         }
 
         if (selectedOption == null) {
-            fail(`Option '${value}' not found on [${selector}] element. Available options: ${availableOptions.join(', ')}`);
+            throw new Error(`Option '${value}' not found on [${selector}] element. Available options: ${availableOptions.join(', ')}`);
         }
     }
 
@@ -159,21 +159,21 @@ class VueTestCase extends TestCase {
     }
 
     findAll(selector) {
-        return this.mounted.vm.$el.querySelectorAll(selector);
+        return this.wrapper.findAll(selector);
     }
 
     find(selector) {
-        let element = this.mounted.vm.$el.querySelector(selector);
+        let element = this.wrapper.find(selector);
 
         if (!element) {
-            fail(`Element [${selector}] was not found`);
+            throw new Error(`Element [${selector}] was not found`);
         }
 
         return element;
     }
 
     nextTick() {
-        this.SUT.$nextTick();
+        this.wrapper.vm.$nextTick();
     }
 }
 
